@@ -1,0 +1,21 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:up": "docker-compose up -d", 
+    "docker:down": "docker-compose down",
+    "dev:backend": "cd backend && pnpm run start:dev",
+    "dev:client": "cd client && pnpm run dev",
+    "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:client\"",
+    "install:all": "pnpm install && cd backend && pnpm install && cd ../client && pnpm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}
