@@ -8,8 +8,9 @@
     "docker:down": "docker-compose down",
     "dev:backend": "cd backend && pnpm run start:dev",
     "dev:client": "cd client && pnpm run dev",
-    "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:client\"",
-    "install:all": "pnpm install && cd backend && pnpm install && cd ../client && pnpm install"
+    "dev": "concurrently \"cd backend && pnpm run start:dev\" \"cd client && pnpm run dev\"",
+    "install:all": "pnpm install && cd backend && pnpm install && cd ../client && pnpm install",
+    "start:prod": "cd backend && pnpm run start:prod"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,38 @@
 steps:
-  # ... (previous steps)
+  # Install pnpm
+  - name: 'node:18'
+    entrypoint: 'npm'
+    args: ['install', '-g', 'pnpm']
+
+  # Install dependencies for the entire project
+  - name: 'node:18'
+    entrypoint: 'pnpm'
+    args: ['run', 'install:all']
+
+  # Build the backend
+  - name: 'node:18'
+    entrypoint: 'pnpm'
+    args: ['run', 'build:backend']
+    dir: 'backend'
+
+  # Build the client
+  - name: 'node:18'
+    entrypoint: 'pnpm'
+    args: ['run', 'build']
+    dir: 'client'
+
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/formal-vertex-435716-d1/github.com/manish-bat/server-side-gtm:$COMMIT_SHA',
+      '-f', 'Dockerfile',
+      '.'
+    ]
+
+  # Push the Docker image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/formal-vertex-435716-d1/github.com/manish-bat/server-side-gtm:$COMMIT_SHA']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -8,7 +41,7 @@ steps:
       - 'deploy'
       - 'weather-app'
       - '--image'
-      - 'gcr.io/normal-vertex-435716-d1/weather-app:$COMMIT_SHA'
+      - 'gcr.io/formal-vertex-435716-d1/github.com/manish-bat/server-side-gtm:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -17,4 +50,8 @@ steps:
       - '--set-env-vars'
       - 'DB_HOST=${_DB_HOST},DB_PORT=${_DB_PORT},DB_USERNAME=${_DB_USERNAME},DB_PASSWORD=${_DB_PASSWORD},DB_NAME=${_DB_NAME},JWT_SECRET=${_JWT_SECRET},DB_SSL=${_DB_SSL},BACKEND_PORT=${_BACKEND_PORT},FRONTEND_PORT=${_FRONTEND_PORT},NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}'
 
-# ... (rest of the file)
+images:
+  - 'gcr.io/formal-vertex-435716-d1/github.com/manish-bat/server-side-gtm:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
