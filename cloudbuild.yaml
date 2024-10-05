@@ -1,0 +1,20 @@
+steps:
+  # ... (previous steps)
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'weather-app'
+      - '--image'
+      - 'gcr.io/normal-vertex-435716-d1/weather-app:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'DB_HOST=${_DB_HOST},DB_PORT=${_DB_PORT},DB_USERNAME=${_DB_USERNAME},DB_PASSWORD=${_DB_PASSWORD},DB_NAME=${_DB_NAME},JWT_SECRET=${_JWT_SECRET},DB_SSL=${_DB_SSL},BACKEND_PORT=${_BACKEND_PORT},FRONTEND_PORT=${_FRONTEND_PORT},NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}'
+
+# ... (rest of the file)
