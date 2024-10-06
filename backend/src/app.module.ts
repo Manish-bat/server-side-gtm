@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { WeatherModule } from './weather/weather.module';
 
 @Module({
   imports: [
@@ -21,12 +22,16 @@ import { AppService } from './app.service';
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
-        ssl: configService.get('DB_SSL') === 'true' ? {
-          rejectUnauthorized: false
-        } : false,
+        ssl:
+          configService.get('DB_SSL') === 'true'
+            ? {
+                rejectUnauthorized: false,
+              }
+            : false,
       }),
       inject: [ConfigService],
     }),
+    WeatherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
